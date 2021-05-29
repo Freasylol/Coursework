@@ -64,18 +64,22 @@ const moveEater = eater => {
 
     if (eater.x > 0) {
         directions.push([-2, 0]);
+        counter++;
     }
 
     if (eater.x < columns - 1) {
         directions.push([2, 0]);
+        counter++;
     }
 
     if (eater.y > 0) {
         directions.push([0, -2]);
+        counter++;
     }
 
     if (eater.y < rows - 1) {
         directions.push([0, 2]);
+        counter++;
     }
 
     const [dx, dy] = getRandomItem(directions);
@@ -111,6 +115,7 @@ const watch = document.querySelector('#watch');
 let milliseconds = 0;
 let timer;
 
+
 const startWatch = () => {
 	watch.classList.remove('paused');
 	clearInterval(timer);
@@ -122,7 +127,7 @@ const startWatch = () => {
 			('0' + dateTimer.getUTCMinutes()).slice(-2) + ':' +
 			('0' + dateTimer.getUTCSeconds()).slice(-2) + ':' +
 			('0' + dateTimer.getUTCMilliseconds()).slice(-3,-1);
-        operationCounter.innerHTML = "34";
+        operationCounter.innerHTML = counter;
 	},10);
 };
 
@@ -137,8 +142,7 @@ const resetWatch = () => {
 	milliseconds = 0;
 	watch.innerHTML = '00:00:00:00';
 };
-
-const operationCounter = 0;
+ 
 const cellSize = 10;
 const canvasPadding = 5;
 const wallColor = '#000';
@@ -149,6 +153,7 @@ const rows = prompt("Введите кол-во строк");
 const eaterColor = "#FF5733"
 const delayTimeout = 0;
 const eatersAmount = prompt("Введите кол-во пожирателей");
+let counter = 0;
 let withAnimation = prompt("Вы хотите создание алгоритма с анимацией или без?");
 withAnimation === "1" ? withAnimation = true : withAnimation = false;
 
