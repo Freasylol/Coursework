@@ -1,6 +1,7 @@
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
 async function main () {
+    startWatch();
     while(!isMazeDone()) {
         for (const eater of eaters) {
             moveEater(eater);
@@ -102,10 +103,41 @@ const isMazeDone = () => {
         }
     }
     let matrixJson = JSON.stringify(matrix);
+    pauseWatch();
     return true;
 }
 
+const watch = document.querySelector('#watch');
+let milliseconds = 0;
+let timer;
 
+const startWatch = () => {
+	watch.classList.remove('paused');
+	clearInterval(timer);
+	timer = setInterval(()=>{
+		milliseconds += 10;
+		let dateTimer = new Date(milliseconds);
+		watch.innerHTML =
+			('0' + dateTimer.getUTCHours()) + ':' +
+			('0' + dateTimer.getUTCMinutes()).slice(-2) + ':' +
+			('0' + dateTimer.getUTCSeconds()).slice(-2) + ':' +
+			('0' + dateTimer.getUTCMilliseconds()).slice(-3,-1);
+	},10);
+};
+
+const pauseWatch = () => {
+  watch.classList.add('paused');
+  clearInterval(timer);
+};
+
+const resetWatch = () => {
+	watch.classList.remove('paused');
+	clearInterval(timer);
+	milliseconds = 0;
+	watch.innerHTML = '00:00:00:00';
+};
+
+const operationCounter = 0;
 const cellSize = 10;
 const canvasPadding = 5;
 const wallColor = '#000';
@@ -116,7 +148,7 @@ const rows = prompt("Введите кол-во строк");
 const eaterColor = "#FF5733"
 const delayTimeout = 0;
 const eatersAmount = prompt("Введите кол-во пожирателей");
-let withAnimation = prompt("Вы хотите создание алгоритма с анимацией или без");
+let withAnimation = prompt("Вы хотите создание алгоритма с анимацией или без?");
 withAnimation === "1" ? withAnimation = true : withAnimation = false;
 
 const canvas = document.querySelector('canvas');
