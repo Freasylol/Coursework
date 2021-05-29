@@ -1,30 +1,4 @@
-const cellSize = 10;
-const canvasPadding = 5;
-const wallColor = '#000';
-const freeCellsColor = '#fff';
-const backgroundColor = '#333';
-const columns = 101;
-const rows = 101;
-const eaterColor = "#FF5733"
-const delayTimeout = 0;
-const eatersAmount = 100;
-const withAnimation = true;
-
-const canvas = document.querySelector('canvas');
-const context = canvas.getContext('2d');
-
-const matrix = createMatrix(columns, rows);
-const eaters = [];
-for (let i = 0; i < eatersAmount; i++) {
-    eaters.push({
-        x: 0,
-        y: 0,
-    })
-}
-
-matrix[0][0] = true;
-
-main();
+const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
 async function main () {
     while(!isMazeDone()) {
@@ -42,13 +16,7 @@ async function main () {
     drawMaze();
 }
 
-function delay (timeout) {
-    return new Promise (resolve => setTimeout(resolve, timeout));
-}
-
-
-
-function createMatrix (columns, rows) {
+const createMatrix = (columns, rows) => {
     const matrix = [];
 
     for (let y = 0; y < rows; y++) {
@@ -62,7 +30,7 @@ function createMatrix (columns, rows) {
     return matrix
 }
 
-function drawMaze () {
+const drawMaze = () => {
     canvas.width = canvasPadding * 2 + columns * cellSize;
     canvas.height = canvasPadding * 2 + rows * cellSize;
 
@@ -80,19 +48,17 @@ function drawMaze () {
             context.fillStyle = color;
             context.fill();
         }
-    }
-
-    
+    } 
 }
 
-function drawEater (eater) {
+const drawEater = eater => {
     context.beginPath();
     context.rect(canvasPadding + eater.x * cellSize, canvasPadding + eater.y * cellSize, cellSize, cellSize);
     context.fillStyle = eaterColor;
     context.fill();
 }
 
-function moveEater (eater) {
+const moveEater = eater => {
     const directions = [];
 
     if (eater.x > 0) {
@@ -122,12 +88,12 @@ function moveEater (eater) {
     }
 }
 
-function getRandomItem (array) {
+const getRandomItem = array => {
     const index = Math.floor(Math.random() * array.length);
     return array[index];
 }
 
-function isMazeDone() {
+const isMazeDone = () => {
     for (let y = 0; y < columns; y += 2) {
         for (let x = 0; x < rows; x += 2) {
             if (!matrix[y][x]) {
@@ -135,5 +101,36 @@ function isMazeDone() {
             }
         }
     }
+    let matrixJson = JSON.stringify(matrix);
     return true;
 }
+
+
+const cellSize = 10;
+const canvasPadding = 5;
+const wallColor = '#000';
+const freeCellsColor = '#fff';
+const backgroundColor = '#333';
+const columns = prompt("Введите кол-во колонок");
+const rows = prompt("Введите кол-во строк");
+const eaterColor = "#FF5733"
+const delayTimeout = 0;
+const eatersAmount = prompt("Введите кол-во пожирателей");
+let withAnimation = prompt("Вы хотите создание алгоритма с анимацией или без");
+withAnimation === "1" ? withAnimation = true : withAnimation = false;
+
+const canvas = document.querySelector('canvas');
+const context = canvas.getContext('2d');
+
+const matrix = createMatrix(columns, rows);
+const eaters = [];
+for (let i = 0; i < eatersAmount; i++) {
+    eaters.push({
+        x: 0,
+        y: 0,
+    })
+}
+
+matrix[0][0] = true;
+
+main();
