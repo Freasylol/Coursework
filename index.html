@@ -4,14 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Создание лабиринта</title>
 </head>
 <body>
     <canvas></canvas>
-    <div class="container center">
-        <h1>Stopwatch</h1>
-        <div class="watch">
-            <h2 id="watch">00:00:00:00</h2>
+    <div class="container">
+        <div class="item">
+            <h1>Stopwatch</h1>
+            <div class="watch">
+                <h2 id="watch" >00:00:00:00</h2>
+            </div>
+        </div>
+        <div class="item">
+            <h1>Operation counter</h1>
+            <h2 id="operationCounter">0</h2>
         </div>
     </div>
     <script src="maze.js"></script>

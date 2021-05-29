@@ -122,6 +122,7 @@ const startWatch = () => {
 			('0' + dateTimer.getUTCMinutes()).slice(-2) + ':' +
 			('0' + dateTimer.getUTCSeconds()).slice(-2) + ':' +
 			('0' + dateTimer.getUTCMilliseconds()).slice(-3,-1);
+        operationCounter.innerHTML = "34";
 	},10);
 };
 

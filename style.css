@@ -1,0 +1,8 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.item:nth-child(2) {
+    padding-left: 50px;
+}
