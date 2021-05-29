@@ -6,3 +6,13 @@
 .item:nth-child(2) {
     padding-left: 50px;
 }
+
+.item {
+    font-family: Georgia;
+    font-size: 14px;
+}
+
+h1 {
+    font-family: Georgia;
+    font-style: 20px;
+}

@@ -8,10 +8,10 @@ async function main () {
         }
         if (withAnimation) {
             drawMaze();
-        for (const eater of eaters) {
-            drawEater(eater);
-        }
-        await delay(delayTimeout);
+            for (const eater of eaters) {
+                drawEater(eater);
+            }
+            await delay(delayTimeout);
         }
     }
     drawMaze();
@@ -23,15 +23,15 @@ const createMatrix = (columns, rows) => {
     for (let y = 0; y < rows; y++) {
         const row = [];
         for (let x = 0; x < columns; x++) {
-            row.push(false);
+            row.push(0);
         }
         matrix.push(row);
     }
 
-    return matrix
+    return matrix;
 }
 
-const drawMaze = () => {
+const drawMaze =  () => {
     canvas.width = canvasPadding * 2 + columns * cellSize;
     canvas.height = canvasPadding * 2 + rows * cellSize;
 
@@ -60,7 +60,7 @@ const drawEater = eater => {
 }
 
 const moveEater = eater => {
-    const directions = [];
+    let directions = [];
 
     if (eater.x > 0) {
         directions.push([-2, 0]);
@@ -88,14 +88,32 @@ const moveEater = eater => {
     eater.y += dy;
 
     if (!matrix[eater.y][eater.x]) {
-        matrix[eater.y][eater.x] = true;  
-        matrix[eater.y - dy / 2][eater.x - dx / 2] = true;  
+        matrix[eater.y][eater.x] = 1;  
+        matrix[eater.y - dy / 2][eater.x - dx / 2] = 1;  
     }
 }
 
 const getRandomItem = array => {
     const index = Math.floor(Math.random() * array.length);
     return array[index];
+}
+
+const download = (content, fileName, contentType) => {
+    let a = document.createElement("a");
+    let file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+}
+
+const genMatrixStr = (matrix) => {
+    let matrixStr = "";
+    for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < columns; x++) {
+            matrixStr += matrix[y][x];
+        }
+    }
+    return matrixStr;
 }
 
 const isMazeDone = () => {
@@ -106,7 +124,8 @@ const isMazeDone = () => {
             }
         }
     }
-    let matrixJson = JSON.stringify(matrix);
+    let matrixStr = genMatrixStr(matrix);
+    download(matrixStr, `matrix${columns}x${rows}.txt`, 'text/plain');
     pauseWatch();
     return true;
 }
@@ -169,6 +188,6 @@ for (let i = 0; i < eatersAmount; i++) {
     })
 }
 
-matrix[0][0] = true;
+matrix[0][0] = 1;
 
 main();
