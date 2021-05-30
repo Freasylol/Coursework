@@ -1,7 +1,7 @@
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
 async function main () {
-    startWatch();
+    startDiagnostics();
     while(!isMazeDone()) {
         for (const eater of eaters) {
             moveEater(eater);
@@ -125,8 +125,9 @@ const isMazeDone = () => {
         }
     }
     let matrixStr = genMatrixStr(matrix);
-    download(matrixStr, `matrix${columns}x${rows}.txt`, 'text/plain');
-    pauseWatch();
+    // download(matrixStr, `matrix${columns}x${rows}.txt`, 'text/plain');
+    matrixCode.innerHTML = matrixStr;
+    pauseDiagnostics();
     return true;
 }
 
@@ -135,7 +136,7 @@ let milliseconds = 0;
 let timer;
 
 
-const startWatch = () => {
+const startDiagnostics = () => {
 	watch.classList.remove('paused');
 	clearInterval(timer);
 	timer = setInterval(()=>{
@@ -150,7 +151,7 @@ const startWatch = () => {
 	},10);
 };
 
-const pauseWatch = () => {
+const pauseDiagnostics = () => {
   watch.classList.add('paused');
   clearInterval(timer);
 };
@@ -175,6 +176,9 @@ const eatersAmount = prompt("Введите кол-во пожирателей")
 let counter = 0;
 let withAnimation = prompt("Вы хотите создание алгоритма с анимацией или без?");
 withAnimation === "1" ? withAnimation = true : withAnimation = false;
+// if (withAnimation) {
+//     document.getElementsByClassName('item').classList.remove('invicible');
+// }
 
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
