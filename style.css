@@ -7,6 +7,14 @@
     padding-left: 50px;
 }
 
+.item:last-child {
+    padding-left: 50px;
+}
+
+.invicible {
+    opacity: 0;
+}
+
 .item {
     font-family: Georgia;
     font-size: 14px;
