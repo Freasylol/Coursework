@@ -2,6 +2,7 @@ const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
 async function main () {
     startDiagnostics();
+
     while(!isMazeDone()) {
         for (const eater of eaters) {
             moveEater(eater);
@@ -12,6 +13,7 @@ async function main () {
                 drawEater(eater);
             }
             await delay(delayTimeout);
+
         }
     }
     drawMaze();
@@ -30,7 +32,7 @@ const createMatrix = (columns, rows) => {
 
     return matrix;
 }
-
+ 
 const drawMaze =  () => {
     canvas.width = canvasPadding * 2 + columns * cellSize;
     canvas.height = canvasPadding * 2 + rows * cellSize;
@@ -39,9 +41,11 @@ const drawMaze =  () => {
     context.rect(0, 0, canvas.width, canvas.height);
     context.fillStyle = backgroundColor;
     context.fill();
+
+
     
-    for (let y = 0; y < columns; y++) {
-        for (let x = 0; x < rows; x++) {
+    for (let y = 0; y < rows; y++) {
+        for (let x = 0; x  < columns; x++) {
             const color = matrix[y][x] ? freeCellsColor : wallColor;
 
             context.beginPath();
@@ -117,8 +121,8 @@ const genMatrixStr = (matrix) => {
 }
 
 const isMazeDone = () => {
-    for (let y = 0; y < columns; y += 2) {
-        for (let x = 0; x < rows; x += 2) {
+    for (let y = 0; y < rows; y += 2) {
+        for (let x = 0; x < columns; x += 2) {
             if (!matrix[y][x]) {
                 return false;
             }
