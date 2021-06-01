@@ -159,7 +159,7 @@ const resetWatch = () => {
 	watch.innerHTML = '00:00:00:00';
 };
 
-function binaryTreeMove() {
+async function binaryTreeMove() {
     for (let y = 0; y < rows; y += 2) {
         for (let x = 0; x < columns; x += 2) {
             let directions = [];
@@ -182,8 +182,7 @@ function binaryTreeMove() {
                 counter++;
                 if (withAnimation) {
                     drawMaze();
-                    // let delay = 1000;
-                    // await delay(delay);
+                    await delay(delayTimeout);
                 }
                 
             }            
@@ -199,18 +198,25 @@ function binaryTreeMove() {
 async function binaryTreeAlgorithm() {
     startDiagnostics();
     binaryTreeMove();
-     
 
 }
 
 const creationChoice = wayToCreate => {
     switch (wayToCreate) {
         case "1": {
+            const eatersAmount = prompt("Введите кол-во пожирателей");
+            const eaters = [];
+            for (let i = 0; i < eatersAmount; i++) {
+                eaters.push({
+                    x: 0,
+                    y: 0,
+                })
+            }
             oldosBrogerAlgorithm();
             break;
         }
         case "2": {
-            let wayToMove = prompt("Введите то, каким способом вы хотели бы двигаться \n1 - северо-запад, \n2 - северо-восток, \n3 - юго-запад, \n4 - юго - восток");
+            // let wayToMove = prompt("Введите то, каким способом вы хотели бы двигаться \n1 - северо-запад, \n2 - северо-восток, \n3 - юго-запад, \n4 - юго - восток");
             binaryTreeAlgorithm();
             break;
         }
@@ -230,25 +236,17 @@ const columns = prompt("Введите кол-во колонок");
 const rows = prompt("Введите кол-во строк");
 const eaterColor = "#FF5733"
 const delayTimeout = 0;
-const eatersAmount = prompt("Введите кол-во пожирателей");
 let counter = 0;
 let withAnimation = prompt("Вы хотите создание алгоритма с анимацией или без?");
 withAnimation === "1" ? withAnimation = true : withAnimation = false;
 // if (withAnimation) {
 //     document.getElementsByClassName('item').classList.remove('invicible'); }
 
-
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 
 const matrix = createMatrix(columns, rows);
-const eaters = [];
-for (let i = 0; i < eatersAmount; i++) {
-    eaters.push({
-        x: 0,
-        y: 0,
-    })
-}
+
 
 matrix[0][0] = 1;
 
