@@ -1,6 +1,6 @@
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
-async function oldosBrogerAlgorithm () {
+async function oldosBrogerAlgorithm (eaters) {
     startDiagnostics();
 
     while (!isMazeDone()) {
@@ -205,14 +205,14 @@ const creationChoice = wayToCreate => {
     switch (wayToCreate) {
         case "1": {
             const eatersAmount = prompt("Введите кол-во пожирателей");
-            const eaters = [];
+            let eaters = [];
             for (let i = 0; i < eatersAmount; i++) {
                 eaters.push({
                     x: 0,
                     y: 0,
                 })
             }
-            oldosBrogerAlgorithm();
+            oldosBrogerAlgorithm(eaters);
             break;
         }
         case "2": {
