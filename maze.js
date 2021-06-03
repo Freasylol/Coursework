@@ -195,10 +195,43 @@ async function binaryTreeMove() {
     } 
 }
 
-async function binaryTreeAlgorithm() {
+const binaryTreeAlgorithm = () => {
     startDiagnostics();
     binaryTreeMove();
+}
 
+async function sideWinderMove() {
+    for (let y = 0; y < rows; y += 2) {
+        for (let x = 0; x < columns; x += 2) {
+            matrix [y][x] = 1;
+            let directions = [];
+            if ((y > 0) && ((x + 1 == columns) || (Math.floor(Math.random() * 2) === 0))) {
+                directions.push([0, -2]);
+            } else if (x + 1 < columns) {
+                directions.push([2, 0]);
+            }
+            if (directions.length !== 0) {
+                let [dx, dy] = getRandomItem(directions);
+                matrix[y + dy][x + dx] = 1; 
+                matrix[(y + dy) - dy / 2][(x + dx) - dx / 2] = 1 
+                counter++;
+                if (withAnimation) {
+                    drawMaze();
+                    await delay(delayTimeout);
+                }    
+            }   
+        }            
+    }
+    if (isMazeDone()) {
+        drawMaze();
+    }  else {
+        console.log("error");
+    } 
+}
+
+const sideWinderAlgorithm = () => {
+    startDiagnostics();
+    sideWinderMove();
 }
 
 const creationChoice = wayToCreate => {
@@ -220,6 +253,11 @@ const creationChoice = wayToCreate => {
             binaryTreeAlgorithm();
             break;
         }
+        case "3": {
+            sideWinderAlgorithm();
+            break;
+        
+        }
         default:
             alert("Был введён неверный способ генерации");
             break;
@@ -231,7 +269,7 @@ const canvasPadding = 5;
 const wallColor = '#000';
 const freeCellsColor = '#fff';
 const backgroundColor = '#333';
-let wayToCreate = prompt("Каким способом вы хотите сгенерировать лабиринт\n 1 - методом Олдоса-Брогера\n 2 - методом Бинарного дерева");
+let wayToCreate = prompt("Каким способом вы хотите сгенерировать лабиринт\n 1 - методом Олдоса-Брогера\n 2 - методом Бинарного дерева\n 3 - методом Сайдвиндер");
 const columns = prompt("Введите кол-во колонок");
 const rows = prompt("Введите кол-во строк");
 const eaterColor = "#FF5733"
