@@ -487,7 +487,7 @@ let checkPositiveInt = arg => {
 
 let checkNotEvenInt = arg => {
     let isNotEvenInt = false;
-    if (arg % 2 === 0) {
+    if (arg % 2 !== 0) {
         isNotEvenInt = true;
     }
     return isNotEvenInt;
@@ -496,8 +496,8 @@ let checkNotEvenInt = arg => {
 let checkAmountOfColsAndRows = arg => {
     let isPositive = checkPositiveInt(arg);
     let isNotEvenInt = checkNotEvenInt(arg);
-    while (isPositive !== true && isNotEvenInt !== true) {
-        arg = prompt("Ошибка! Повторите ввод");
+    while (isPositive !== true || isNotEvenInt !== true) {
+        arg = parseInt(prompt("Ошибка! Повторите ввод"));
         isPositive = checkPositiveInt(arg);
         isNotEvenInt = checkNotEvenInt(arg);
     }
@@ -510,7 +510,6 @@ const wallColor = '#000';
 const freeCellsColor = '#fff';
 const backgroundColor = '#333';
 let wayToCreate = parseInt(prompt("Каким способом вы хотите сгенерировать лабиринт\n 1 - методом Олдоса-Брогера\n 2 - методом Бинарного дерева\n 3 - методом Сайдвиндер\n 4 - методом Уилсона"));
-
 let columns = parseInt(prompt("Введите кол-во колонок(только нечётное кол-во)"));
 columns = checkAmountOfColsAndRows(columns);
 let rows = parseInt(prompt(("Введите кол-во строк(только нечётное кол-во)")));
