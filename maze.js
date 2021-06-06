@@ -140,8 +140,11 @@ const isMazeDone = matrix => {
         }
     }
     let matrixStr = genMatrixStr(matrix);
-    // download(matrixStr, `matrix${columns}x${rows}.txt`, 'text/plain');
-    matrixCode.innerHTML = matrixStr;
+    if (toDownload) {
+        download(matrixStr, `matrix${columns}x${rows}.txt`, 'text/plain');
+    } else {
+        matrixCode.innerHTML = matrixStr;
+    }
     pauseDiagnostics();
     return true;
 }
@@ -519,6 +522,9 @@ const delayTimeout = 0;
 let counter = 0;
 let withAnimation = parseInt(prompt("Вы хотите создание алгоритма с анимацией или без?\n1 - с анимацией, 0 - без)"));
 withAnimation === 1 ? withAnimation = true : withAnimation = false;
+
+let toDownload = parseInt(prompt("Вы хотите скачать конечную матрицу?(1 - да, 0 - нет)"));
+toDownload === 1 ? toDownload = true : toDownload = false;
 
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
