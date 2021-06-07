@@ -1,7 +1,10 @@
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
-async function aldousBroderAlgorithm (eaters) {
+async function aldousBroderAlgorithm() {
     startDiagnostics();
+    let eatersAmount = parseInt(prompt("Введите кол-во пожирателей"));
+    eatersAmount = checkPositiveIntHandler(eatersAmount);
+    let eaters = configureEaters(eatersAmount);
     let matrix = createMatrix(columns, rows);
     matrix[0][0] = 1;
     while (!isMazeDone(matrix)) {
@@ -33,16 +36,14 @@ const createMatrix = (columns, rows) => {
     return matrix;
 }
 
-const createProccessedMatrixObject = (columns, rows) => {
+const createMatrixObject = (columns, rows) => {
     let matrix = [];
     for (let y = 0; y < rows; y++) {
         const row = [];
         for (let x = 0; x < columns; x++) {
             row.push({
-                m: 0,
-                p: 0,
+                value: 0,
                 direction: "",
-                passed: 0,
                 paint: 0,
             });
         }
@@ -133,7 +134,7 @@ const genMatrixStrForObject = matrix => {
     let matrixStr = "";
     for (let y = 0; y < rows; y++) {
         for (let x = 0; x < columns; x++) {
-            matrixStr += matrix[y][x].m;
+            matrixStr += matrix[y][x].value;
         }
     }
     return matrixStr;
@@ -296,7 +297,7 @@ const drawProcessedMaze = (matrix) => {
     context.fill(); 
     for (let y = 0; y < rows; y++) {
         for (let x = 0; x  < columns; x++) {
-            const color = matrix[y][x].m === 1 ? freeCellsColor : wallColor;
+            const color = matrix[y][x].value === 1 ? freeCellsColor : wallColor;
 
             context.beginPath();
             context.rect(canvasPadding + x * cellSize, canvasPadding + y * cellSize, cellSize, cellSize);
@@ -317,11 +318,11 @@ const findUnprocessedByKey = (matrix, key) => {
     let yValue = 0;
     for (let y = 0; y < rows; y += 2) {
         for (let x = 0; x < columns; x += 2) {
-            if ((matrix[y][x].p === 0) && (counter === key)) {
+            if ((matrix[y][x].value === 0) && (counter === key)) {
                 xValue = x;
                 yValue = y;
                 break;
-            } else if (matrix[y][x].p === 0) {
+            } else if (matrix[y][x].value === 0) {
                 counter++;
             }
         }
@@ -333,7 +334,7 @@ const countUnproccessedEl = matrix => {
     let counter = 0;
     for (let y = 0; y < rows; y += 2) {
         for (let x = 0; x < columns; x += 2) {
-            if (matrix[y][x].p === 0) {
+            if (matrix[y][x].value === 0) {
                 counter++;
             }
         }
@@ -352,14 +353,13 @@ async function willsonAlgorithMove() {
         x: 0,
         y: 0
     }
-    const matrix = createProccessedMatrixObject(columns, rows);
+    const matrix = createMatrixObject(columns, rows);
     let numOfUnprocessedEl = countUnproccessedEl(matrix);
     while (countUnproccessedEl(matrix) > 0) {
         if (countUnproccessedEl(matrix) === numOfUnprocessedEl) {
             randKey = Math.floor(Math.random() * countUnproccessedEl(matrix));
             [randY, randX] = findUnprocessedByKey(matrix, randKey);
-            matrix[randY][randX].m = 1;
-            matrix[randY][randX].p = 1;
+            matrix[randY][randX].value = 1;
         } else {
             randKey = Math.floor(Math.random() * countUnproccessedEl(matrix));
             [randY, randX] = findUnprocessedByKey(matrix, randKey);
@@ -367,47 +367,22 @@ async function willsonAlgorithMove() {
             firstCell.y = randY;
             eater.x = randX;
             eater.y = randY;
-            while (matrix[eater.y][eater.x].p !== 1) {
+            while (matrix[eater.y][eater.x].value !== 1) {
                 let directions = [];
-                // matrix[eater.y][eater.x].passed = 1;
                 if (eater.x > 0) {
-                    if (eater.x - 2 >= 0) {
-                        if (matrix[eater.y][(eater.x - 2)].passed !== 1) {
-                            directions.push([-2, 0, "left"]);
-                        }
-                    } else {
-                        directions.push([-2, 0, "left"]);
-                    }
+                    directions.push([-2, 0, "left"]);
                 }
             
                 if (eater.x < columns - 1) {
-                    if (eater.x + 2 < rows) {
-                        if (matrix[eater.y][eater.x + 2].passed !== 1) {
-                            directions.push([2, 0, "right"]);
-                        }
-                    } else {
-                        directions.push([2, 0, "right"]);
-                    }
+                    directions.push([2, 0, "right"]);
                 }
 
                 if (eater.y > 0)  {
-                    if (eater.y - 2 >= 0)  {
-                        if (matrix[eater.y - 2][eater.x].passed !== 1) {
-                            directions.push([0, -2, "top"]);
-                        }
-                    } else {
-                        directions.push([0, -2, "top"]);
-                    }
+                    directions.push([0, -2, "top"]);
                 }
             
                 if (eater.y < rows - 1) {
-                    if (eater.y + 2 < rows) {
-                        if (matrix[eater.y + 2][eater.x].passed !== 1) {
-                            directions.push([0, 2, "bottom"]);
-                        }
-                    } else {
-                        directions.push([0, 2, "bottom"]);
-                    }
+                    directions.push([0, 2, "bottom"]);
                 }
 
                 [dx, dy, direction] = getRandomItem(directions);
@@ -419,7 +394,7 @@ async function willsonAlgorithMove() {
             eater.x = firstCell.x;
             eater.y = firstCell.y;
             let coords = [];
-            while (matrix[eater.y][eater.x].p !== 1) {
+            while (matrix[eater.y][eater.x].value !== 1) {
                 if (matrix[eater.y][eater.x].direction === "top") {               
                     dy = -2;
                     dx = 0;
@@ -434,7 +409,6 @@ async function willsonAlgorithMove() {
                     dy = 0;
                 }
                 matrix[eater.y][eater.x].direction = "";
-                matrix[eater.y][eater.x].passed = 0;
                 matrix[eater.y][eater.x].paint = 1;
 
                 eater.y += dy;
@@ -443,7 +417,7 @@ async function willsonAlgorithMove() {
                 matrix[eater.y - dy / 2][eater.x - dx / 2].paint = 1;  
                 counter++;
             }
-            drawPaint(matrix);
+            processPaint(matrix);
         }
         if (withAnimation) {
             drawProcessedMaze(matrix);
@@ -457,7 +431,7 @@ async function willsonAlgorithMove() {
 const isMazeDoneForObjectMatrix = matrix => {
     for (let y = 0; y < rows; y += 2) {
         for (let x = 0; x < columns; x += 2) {
-            if (!matrix[y][x].m) {
+            if (!matrix[y][x].value) {
                 return false;
             }
         }
@@ -481,12 +455,11 @@ const isMazeDoneForObjectMatrix = matrix => {
     return true;
 }
 
-const drawPaint = matrix => {
+const processPaint = matrix => {
     for (let y = 0; y < rows; y++) {
         for (let x = 0; x < columns; x++) {
             if (matrix[y][x].paint === 1) {
-                matrix[y][x].p = 1;
-                matrix[y][x].m = 1;
+                matrix[y][x].value = 1;
                 matrix[y][x].paint = 0;
             }
         }
@@ -498,19 +471,44 @@ const willsonAlgorithm = () => {
     willsonAlgorithMove();
 }
 
-const creationChoice = (wayToCreate) => {
-    switch (wayToCreate) {
-        case 1: {
-            let eatersAmount = parseInt(prompt("Введите кол-во пожирателей"));
-            eatersAmount = checkPositiveIntHandler(eatersAmount);
-            let eaters = [];
-            for (let i = 0; i < eatersAmount; i++) {
+const configureEaters = eatersAmount => {
+    let eaters = [];
+    for (let i = 0; i < eatersAmount; i++) {
+        let h = i % 4;
+        switch(h) {
+            case 0:
                 eaters.push({
                     x: 0,
                     y: 0,
                 })
-            }
-            aldousBroderAlgorithm(eaters);
+                break;
+            case 1:
+                eaters.push({
+                    x: columns - 1,
+                    y: 0,
+                })
+                break;
+            case 2:
+                eaters.push({
+                    x: columns - 1,
+                    y: rows - 1,
+                })
+                break;
+            case 3:
+                eaters.push({
+                    x: 0,
+                    y: rows - 1,
+                })
+                break;
+        }   
+    }
+    return eaters;
+}
+
+const creationChoice = (wayToCreate) => {
+    switch (wayToCreate) {
+        case 1: {
+            aldousBroderAlgorithm();
             break;
         }
         case 2: {
@@ -573,7 +571,7 @@ const canvasPadding = 5;
 const wallColor = '#000';
 const freeCellsColor = '#fff';
 const backgroundColor = '#333';
-let wayToCreate = parseInt(prompt("Каким способом вы хотите сгенерировать лабиринт\n 1 - методом Олдоса-Брогера\n 2 - методом Бинарного дерева\n 3 - методом Сайдвиндер\n 4 - методом Уилсона"));
+let wayToCreate = parseInt(prompt("Каким способом вы хотите сгенерировать лабиринт\n 1 - методом Олдоса-Бродера\n 2 - методом Бинарного дерева\n 3 - методом Сайдвиндер\n 4 - методом Уилсона"));
 let columns = parseInt(prompt("Введите кол-во колонок(только нечётное кол-во)"));
 columns = checkAmountOfColsAndRows(columns);
 let rows = parseInt(prompt(("Введите кол-во строк(только нечётное кол-во)")));
