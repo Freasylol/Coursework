@@ -1,7 +1,6 @@
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
 async function aldousBroderAlgorithm() {
-    startDiagnostics();
     let eatersAmount = parseInt(prompt("Введите кол-во пожирателей"));
     eatersAmount = checkPositiveIntHandler(eatersAmount);
     let eaters = configureEaters(eatersAmount);
@@ -141,20 +140,20 @@ const genMatrixStrForObject = matrix => {
 }
 
  String.prototype.insert = function(index, string) {
-        if (index > 0)
-        {
-          return this.substring(0, index) + string + this.substring(index, this.length);
-        }
-      
-        return string + this;
-      };
+    if (index > 0) {
+        return this.substring(0, index) + string + this.substring(index, this.length);
+    }
+    
+    return string + this;
+    };
 
 const divideMatrixStr = matrixStr => {
     let length = matrixStr.length
     for (let i = 1; i < matrixStr.length; i++) {
-        if (i % 50 === 0) {
+        if (i % 5 === 0) {
+            console.log(matrixStr.length);
             matrixStr = matrixStr.insert(i, "\n");
-            i++;
+            console.log(matrixStr.length);
         }
     }
     return matrixStr;
@@ -175,43 +174,18 @@ const isMazeDone = matrix => {
         matrixStr += `\n${rows}`;
         download(matrixStr, `matrix${columns}x${rows}.txt`, 'text/plain');
     } else {
-        if (matrixStr.length > 50) {
+        if (matrixStr.length > 5) {
             matrixStr = divideMatrixStr(matrixStr);
+            download(matrixStr, `matrix${columns}x${rows}.txt`, 'text/plain');
         } 
         matrixStr += `\n${columns}`;
         matrixStr += `\n${rows}`;
         matrixCode.innerHTML = matrixStr; 
         
     }
-    pauseDiagnostics();
+
     return true;
 }
-
-const watch = document.querySelector('#watch');
-let milliseconds = 0;
-let timer;
-
-
-const startDiagnostics = () => {
-	watch.classList.remove('paused');
-	clearInterval(timer);
-	timer = setInterval(()=>{
-		milliseconds += 10;
-		let dateTimer = new Date(milliseconds);
-		watch.innerHTML =
-			('0' + dateTimer.getUTCHours()) + ':' +
-			('0' + dateTimer.getUTCMinutes()).slice(-2) + ':' +
-			('0' + dateTimer.getUTCSeconds()).slice(-2) + ':' +
-			('0' + dateTimer.getUTCMilliseconds()).slice(-3,-1);
-        operationCounter.innerHTML = counter;
-	},10);
-};
-
-const pauseDiagnostics = () => {
-  watch.classList.add('paused');
-  clearInterval(timer);
-  operationCounter.innerHTML = counter;
-};
 
 async function binaryTreeMove() {
     const matrix = createMatrix(columns, rows);
@@ -252,7 +226,6 @@ async function binaryTreeMove() {
 }
 
 const binaryTreeAlgorithm = () => {
-    startDiagnostics();
     binaryTreeMove();
 }
 
@@ -308,7 +281,6 @@ const drawProcessedMaze = (matrix) => {
 }
 
 const sideWinderAlgorithm = () => {
-    startDiagnostics();
     sideWinderMove();
 }
 
@@ -451,7 +423,6 @@ const isMazeDoneForObjectMatrix = matrix => {
         matrixCode.innerHTML = matrixStr; 
         
     }
-    pauseDiagnostics();
     return true;
 }
 
@@ -467,7 +438,6 @@ const processPaint = matrix => {
 }
 
 const willsonAlgorithm = () => {
-    startDiagnostics();
     willsonAlgorithMove();
 }
 
@@ -584,11 +554,13 @@ withAnimation === 1 ? withAnimation = true : withAnimation = false;
 
 let toDownload = parseInt(prompt("Вы хотите скачать конечную матрицу?(1 - да, 0 - нет)"));
 toDownload === 1 ? toDownload = true : toDownload = false;
+if (!toDownload) {
+    let matrixHeader = document.getElementById("matrixHeader");
+    matrixHeader.classList.remove("invicible");
+}
 
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 
 creationChoice(wayToCreate);
-
-
 
