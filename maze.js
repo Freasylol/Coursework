@@ -119,11 +119,21 @@ const download = (content, fileName, contentType) => {
     a.click();
 }
 
-const genMatrixStr = (matrix) => {
+const genMatrixStr = matrix => {
     let matrixStr = "";
     for (let y = 0; y < rows; y++) {
         for (let x = 0; x < columns; x++) {
             matrixStr += matrix[y][x];
+        }
+    }
+    return matrixStr;
+}
+
+const genMatrixStrForObject = matrix => {
+    let matrixStr = "";
+    for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < columns; x++) {
+            matrixStr += matrix[y][x].m;
         }
     }
     return matrixStr;
@@ -440,8 +450,35 @@ async function willsonAlgorithMove() {
             await delay(delayTimeout);
         }      
     }
-    drawProcessedMaze(matrix);
+    drawProcessedMaze(matrix);;
+    isMazeDoneForObjectMatrix(matrix);
+}
+
+const isMazeDoneForObjectMatrix = matrix => {
+    for (let y = 0; y < rows; y += 2) {
+        for (let x = 0; x < columns; x += 2) {
+            if (!matrix[y][x].m) {
+                return false;
+            }
+        }
+    }
+    let matrixStr = genMatrixStrForObject(matrix);
+    if (toDownload) {
+        matrixHeader.remove();
+        matrixStr += `\n${columns}`;
+        matrixStr += `\n${rows}`;
+        download(matrixStr, `matrix${columns}x${rows}.txt`, 'text/plain');
+    } else {
+        if (matrixStr.length > 50) {
+            matrixStr = divideMatrixStr(matrixStr);
+        } 
+        matrixStr += `\n${columns}`;
+        matrixStr += `\n${rows}`;
+        matrixCode.innerHTML = matrixStr; 
+        
+    }
     pauseDiagnostics();
+    return true;
 }
 
 const drawPaint = matrix => {
