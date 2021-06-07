@@ -105,7 +105,6 @@ const moveEaterAldousBroder = (matrix, eater) => {
     if (!matrix[eater.y][eater.x]) {
         matrix[eater.y][eater.x] = 1;  
         matrix[eater.y - dy / 2][eater.x - dx / 2] = 1;  
-        counter++;
     }
 }
 
@@ -176,11 +175,11 @@ const isMazeDone = matrix => {
     } else {
         if (matrixStr.length > 5) {
             matrixStr = divideMatrixStr(matrixStr);
-            download(matrixStr, `matrix${columns}x${rows}.txt`, 'text/plain');
         } 
         matrixStr += `\n${columns}`;
         matrixStr += `\n${rows}`;
         matrixCode.innerHTML = matrixStr; 
+        alert(matrixStr);
         
     }
 
@@ -209,7 +208,6 @@ async function binaryTreeMove() {
                
                 matrix[y + dy][x + dx] = 1; 
                 matrix[(y + dy) - dy / 2][(x + dx) - dx / 2] = 1 
-                counter++;
                 if (withAnimation) {
                     drawMaze(matrix);
                     await delay(delayTimeout);
@@ -245,7 +243,6 @@ async function sideWinderMove() {
                 let [dx, dy] = getRandomItem(directions);
                 matrix[y + dy][x + dx] = 1; 
                 matrix[(y + dy) - dy / 2][(x + dx) - dx / 2] = 1 
-                counter++;
                 if (withAnimation) {
                     drawMaze(matrix);
                     await delay(delayTimeout);
@@ -387,7 +384,6 @@ async function willsonAlgorithMove() {
                 eater.x += dx;
 
                 matrix[eater.y - dy / 2][eater.x - dx / 2].paint = 1;  
-                counter++;
             }
             processPaint(matrix);
         }
@@ -547,10 +543,13 @@ columns = checkAmountOfColsAndRows(columns);
 let rows = parseInt(prompt(("Введите кол-во строк(только нечётное кол-во)")));
 rows = checkAmountOfColsAndRows(rows);
 const eaterColor = "#FF5733"
-const delayTimeout = 0;
-let counter = 0;
+let delayTimeout = 0;
 let withAnimation = parseInt(prompt("Вы хотите создание алгоритма с анимацией или без?\n1 - с анимацией, 0 - без)"));
 withAnimation === 1 ? withAnimation = true : withAnimation = false;
+if (withAnimation) {
+    delayTimeout = parseInt(prompt("Установите задержку(в мс)"))
+    delayTimeout = checkPositiveIntHandler(delayTimeout)
+}
 
 let toDownload = parseInt(prompt("Вы хотите скачать конечную матрицу?(1 - да, 0 - нет)"));
 toDownload === 1 ? toDownload = true : toDownload = false;
