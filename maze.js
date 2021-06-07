@@ -233,7 +233,7 @@ async function binaryTreeMove() {
             }            
         }
     }
-    if (isMazeDone()) {
+    if (isMazeDone(matrix)) {
         drawMaze(matrix);
     }  else {
         console.log("error");
@@ -269,7 +269,7 @@ async function sideWinderMove() {
             }   
         }            
     }
-    if (isMazeDone()) {
+    if (isMazeDone(matrix)) {
         drawMaze(matrix);
     }  else {
         console.log("error");
@@ -359,7 +359,7 @@ async function willsonAlgorithMove() {
             eater.y = randY;
             while (matrix[eater.y][eater.x].p !== 1) {
                 let directions = [];
-                matrix[eater.y][eater.x].passed = 1;
+                // matrix[eater.y][eater.x].passed = 1;
                 if (eater.x > 0) {
                     if (eater.x - 2 >= 0) {
                         if (matrix[eater.y][(eater.x - 2)].passed !== 1) {
@@ -423,17 +423,13 @@ async function willsonAlgorithMove() {
                     dx = 2;
                     dy = 0;
                 }
-                if (eater.x === firstCell.x && eater.y === firstCell.y) {
-                    matrix[eater.y][eater.x].direction = "";
-                    matrix[eater.y][eater.x].passed = 0;
-                    matrix[eater.y][eater.x].paint = 1;
-                }
+                matrix[eater.y][eater.x].direction = "";
+                matrix[eater.y][eater.x].passed = 0;
+                matrix[eater.y][eater.x].paint = 1;
+
                 eater.y += dy;
                 eater.x += dx;
 
-                matrix[eater.y][eater.x].paint = 1; 
-                matrix[eater.y][eater.x].passed = 0;
-                matrix[eater.y][eater.x].direction = "";
                 matrix[eater.y - dy / 2][eater.x - dx / 2].paint = 1;  
                 counter++;
             }
