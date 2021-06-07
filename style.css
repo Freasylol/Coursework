@@ -24,3 +24,7 @@ h1 {
     font-family: Georgia;
     font-style: 20px;
 }
+
+.invicible {
+    opacity: 0;
+}

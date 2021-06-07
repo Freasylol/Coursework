@@ -126,8 +126,26 @@ const genMatrixStr = (matrix) => {
             matrixStr += matrix[y][x];
         }
     }
-    matrixStr += `\n${columns}`;
-    matrixStr += `\n${rows}`;
+    return matrixStr;
+}
+
+ String.prototype.insert = function(index, string) {
+        if (index > 0)
+        {
+          return this.substring(0, index) + string + this.substring(index, this.length);
+        }
+      
+        return string + this;
+      };
+
+const divideMatrixStr = matrixStr => {
+    let length = matrixStr.length
+    for (let i = 1; i < matrixStr.length; i++) {
+        if (i % 50 === 0) {
+            matrixStr = matrixStr.insert(i, "\n");
+            i++;
+        }
+    }
     return matrixStr;
 }
 
@@ -141,9 +159,18 @@ const isMazeDone = matrix => {
     }
     let matrixStr = genMatrixStr(matrix);
     if (toDownload) {
+        matrixHeader.remove();
+        matrixStr += `\n${columns}`;
+        matrixStr += `\n${rows}`;
         download(matrixStr, `matrix${columns}x${rows}.txt`, 'text/plain');
     } else {
-        matrixCode.innerHTML = matrixStr;
+        if (matrixStr.length > 50) {
+            matrixStr = divideMatrixStr(matrixStr);
+        } 
+        matrixStr += `\n${columns}`;
+        matrixStr += `\n${rows}`;
+        matrixCode.innerHTML = matrixStr; 
+        
     }
     pauseDiagnostics();
     return true;
@@ -441,8 +468,8 @@ const willsonAlgorithm = () => {
 const creationChoice = (wayToCreate) => {
     switch (wayToCreate) {
         case 1: {
-            const eatersAmount = parseInt(prompt("Введите кол-во пожирателей"));
-            checkPositiveIntHandler(eatersAmount);
+            let eatersAmount = parseInt(prompt("Введите кол-во пожирателей"));
+            eatersAmount = checkPositiveIntHandler(eatersAmount);
             let eaters = [];
             for (let i = 0; i < eatersAmount; i++) {
                 eaters.push({
@@ -471,21 +498,22 @@ const creationChoice = (wayToCreate) => {
     }
 }
 
-const checkPositiveIntHandler = arg => {
-    try {
-        checkPositiveInt(arg);
-    } catch(er) {
-        arg = parseInt(prompt(er.message + "\nПовторите ввод"));
-        checkPositiveIntHandler(arg);
-    }
-}
-
 let checkPositiveInt = arg => {
     let isPositive = false;
     if ((typeof(arg) === "number") && (arg !== NaN) && (arg > 0)) {
         isPositive = true;
     } 
     return isPositive;
+}
+
+let checkPositiveIntHandler = arg => {
+    let isPositive = checkPositiveInt(arg);
+    while (isPositive !== true) {
+        arg = parseInt(prompt("Ошибка. Повторите ввод"));
+        isPositive = checkPositiveInt(arg);
+    }
+    return arg;
+
 }
 
 let checkNotEvenInt = arg => {
