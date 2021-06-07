@@ -149,10 +149,8 @@ const genMatrixStrForObject = matrix => {
 const divideMatrixStr = matrixStr => {
     let length = matrixStr.length
     for (let i = 1; i < matrixStr.length; i++) {
-        if (i % 5 === 0) {
-            console.log(matrixStr.length);
+        if (i % 50 === 0) {
             matrixStr = matrixStr.insert(i, "\n");
-            console.log(matrixStr.length);
         }
     }
     return matrixStr;
@@ -173,14 +171,13 @@ const isMazeDone = matrix => {
         matrixStr += `\n${rows}`;
         download(matrixStr, `matrix${columns}x${rows}.txt`, 'text/plain');
     } else {
-        if (matrixStr.length > 5) {
+        if (matrixStr.length > 50) {
             matrixStr = divideMatrixStr(matrixStr);
         } 
         matrixStr += `\n${columns}`;
         matrixStr += `\n${rows}`;
+        let matrixCode = document.getElementById("matrixCode");
         matrixCode.innerHTML = matrixStr; 
-        alert(matrixStr);
-        
     }
 
     return true;
